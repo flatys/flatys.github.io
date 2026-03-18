@@ -13,24 +13,32 @@
         /* Panorama header */
         .header-image {
             width: 100%;
-            aspect-ratio: 2400 / 740; /* behoudt de juiste verhouding */
             background-image: url("panorama.jpg");
-            background-size: cover;
-            background-position: center;
+            background-size: cover;        /* zoomt mooi in */
+            background-position: center;   /* houdt het midden in beeld */
             background-repeat: no-repeat;
+            
+            /* Standaard hoogte (voor laptops/tablets) */
+            height: 300px;
         }
 
-        /* Optioneel: max hoogte zodat hij niet te groot wordt op grote schermen */
+        /* Telefoons: vul ~50% van het scherm */
+        @media (max-width: 600px) {
+            .header-image {
+                height: 50vh; /* halve schermhoogte */
+            }
+        }
+
+        /* Grote schermen: niet te groot laten worden */
         @media (min-width: 1200px) {
             .header-image {
-                max-height: 350px; /* kun je aanpassen */
+                height: 350px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Panorama bovenaan -->
     <div class="header-image"></div>
 
 </body>
