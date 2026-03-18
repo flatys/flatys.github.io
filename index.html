@@ -1,102 +1,118 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <title>Flaty's</title>
-    <style>
-        @font-face {
-            font-family: 'CMUSerif';
-            src: url('CMU serif.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+  <meta charset="utf-8">
+  <title>Flaty's</title>
+  <style>
+    @font-face {
+      font-family: 'CMUSerif';
+      src: url('CMU serif.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
 
-        body {
-            margin: 0;
-            background: white;
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
+    html,body { margin:0; height:100%; background:white; }
 
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 50vh;
-            overflow: hidden;
-        }
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 50vh;
+      overflow: hidden;
+    }
 
-        .hero img {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50vh;
-            object-fit: cover;
-            object-position: center;
-            pointer-events: none;
-            transform: translateY(0);
-            transition: transform 0.05s linear;
-            z-index: 1;
-        }
+    /* afbeelding is absoluut binnen hero (niet fixed) */
+    .hero img {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, 0);
+      width: 100%;
+      height: 50vh;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
 
-        /* overlay binnen .hero zodat de tekst visueel over de panorama ligt */
-        .hero .overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            pointer-events: none;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+      /* performance hints */
+      will-change: transform;
+      -webkit-transform: translate3d(-50%,0,0);
+      transform: translate3d(-50%,0,0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
 
-        .hero .overlay h1 {
-            margin: 0;
-            color: #ffffff;
-            font-size: 6rem; /* 1.5x van 4rem */
-            letter-spacing: 1px;
-            text-transform: none;
-            font-family: 'CMUSerif', serif;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+    .hero .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 2;
+      pointer-events: none;
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
 
-        .content {
-            height: 200vh;
-            background: white;
-            position: relative;
-            z-index: 10;
-        }
+    .hero .overlay h1 {
+      margin:0;
+      color:#ffffff;
+      font-family: 'CMUSerif', serif;
+      font-size: 6rem; /* jouw gewenste grootte */
+      line-height:1;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
 
-        @media (max-width: 768px) {
-            .hero .overlay h1 { font-size: 3.3rem; } /* 1.5x van 2.2rem */
-        }
-    </style>
+    .content { height:200vh; background:white; position:relative; z-index:10; }
+
+    @media (max-width:768px){
+      .hero .overlay h1 { font-size:3.3rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="hero">
-        <img src="panorama.jpg" id="heroImg" alt="">
-        <div class="overlay">
-            <h1>Flaty's</h1>
-        </div>
-    </div>
+  <div class="hero" id="hero">
+    <img src="panorama.jpg" id="heroImg" alt="">
+    <div class="overlay"><h1>Flaty's</h1></div>
+  </div>
 
-    <div class="content"></div>
+  <div class="content"></div>
 
-    <script>
-        const img = document.getElementById("heroImg");
+  <script>
+    // rAF-throttled parallax, berekend relatief aan de hero container
+    (function(){
+      const img = document.getElementById('heroImg');
+      const hero = document.getElementById('hero');
+      let ticking = false;
 
-        window.addEventListener("scroll", () => {
-            const scrollY = window.scrollY;
-            img.style.transform = `translateY(${scrollY * -0.5}px)`; 
-        }, { passive: true });
-    </script>
+      function update() {
+        const rect = hero.getBoundingClientRect();
+        // rect.top is positie van hero tov viewport; we willen beweging wanneer hero in beeld is
+        // pas factor aan voor gewenste parallax-intensiteit (negatief = omhoog bij scroll)
+        const factor = -0.5;
+        const translateY = Math.round(rect.top * factor);
+        // gebruik translate3d voor GPU-accel
+        img.style.transform = `translate3d(-50%, ${translateY}px, 0)`;
+        ticking = false;
+      }
+
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      }
+
+      // passive listener voor betere touch-perf
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // initial update (bij laden)
+      update();
+    })();
+  </script>
 
 </body>
 </html>
