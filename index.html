@@ -2,11 +2,20 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Mijn Website</title>
+    <title>Flaty's</title>
     <style>
+        @font-face {
+            font-family: 'CMUSerif';
+            src: url('CMU serif.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
         body {
             margin: 0;
             background: white;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         .hero {
@@ -27,6 +36,34 @@
             pointer-events: none;
             transform: translateY(0);
             transition: transform 0.05s linear;
+            z-index: 1;
+        }
+
+        /* overlay binnen .hero zodat de tekst visueel over de panorama ligt */
+        .hero .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero .overlay h1 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 6rem; /* 1.5x van 4rem */
+            letter-spacing: 1px;
+            text-transform: none;
+            font-family: 'CMUSerif', serif;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .content {
@@ -35,12 +72,19 @@
             position: relative;
             z-index: 10;
         }
+
+        @media (max-width: 768px) {
+            .hero .overlay h1 { font-size: 3.3rem; } /* 1.5x van 2.2rem */
+        }
     </style>
 </head>
 <body>
 
     <div class="hero">
-        <img src="panorama.jpg" id="heroImg">
+        <img src="panorama.jpg" id="heroImg" alt="">
+        <div class="overlay">
+            <h1>Flaty's</h1>
+        </div>
     </div>
 
     <div class="content"></div>
@@ -51,7 +95,7 @@
         window.addEventListener("scroll", () => {
             const scrollY = window.scrollY;
             img.style.transform = `translateY(${scrollY * -0.5}px)`; 
-        });
+        }, { passive: true });
     </script>
 
 </body>
