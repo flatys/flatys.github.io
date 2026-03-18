@@ -7,39 +7,21 @@
         body {
             margin: 0;
             background: white;
-            font-family: Arial, sans-serif;
         }
 
-        /* Panorama header */
-        .header-image {
+        .hero {
             width: 100%;
+            height: 50vh;
             background-image: url("panorama.jpg");
-            background-size: cover;        /* zoomt mooi in */
-            background-position: center;   /* houdt het midden in beeld */
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
-            
-            /* Standaard hoogte (voor laptops/tablets) */
-            height: 300px;
-        }
-
-        /* Telefoons: vul ~50% van het scherm */
-        @media (max-width: 600px) {
-            .header-image {
-                height: 50vh; /* halve schermhoogte */
-            }
-        }
-
-        /* Grote schermen: niet te groot laten worden */
-        @media (min-width: 1200px) {
-            .header-image {
-                height: 350px;
-            }
         }
     </style>
 </head>
 <body>
 
-    <div class="header-image"></div>
+    <div class="hero"></div>
 
 </body>
 </html>
