@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Panorama</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
-    }
-    body {
-      background-image: url("panorama.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Mijn Website</title>
+    <style>
+        body {
+            margin: 0;
+            background: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Panorama header */
+        .header-image {
+            width: 100%;
+            aspect-ratio: 2400 / 740; /* behoudt de juiste verhouding */
+            background-image: url("panorama.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Optioneel: max hoogte zodat hij niet te groot wordt op grote schermen */
+        @media (min-width: 1200px) {
+            .header-image {
+                max-height: 350px; /* kun je aanpassen */
+            }
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Panorama bovenaan -->
+    <div class="header-image"></div>
+
 </body>
 </html>
