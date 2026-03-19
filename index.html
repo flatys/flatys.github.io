@@ -113,26 +113,45 @@
     const hero=document.getElementById('hero');
     const heroImg=document.getElementById('heroImg');
 
-    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    // Parallax — smooth on all devices including touch
     let ticking=false;
+    let lastScrollY = window.scrollY;
     function updateParallax(){
       if(!hero||!heroImg) return;
-      if(isTouch){ heroImg.style.transform='translate3d(-50%,0,0) translateZ(0)'; ticking=false; return; }
       const rect=hero.getBoundingClientRect();
       const translateY=Math.round(rect.top * -0.5);
       heroImg.style.transform=`translate3d(-50%, ${translateY}px, 0)`;
       ticking=false;
     }
-    function onScroll(){ if(!ticking){ requestAnimationFrame(updateParallax); ticking=true; } navbar.classList.toggle('scrolled', window.scrollY>10); updateNavbarOverHero(); }
+    function onScroll(){
+      if(!ticking){ requestAnimationFrame(updateParallax); ticking=true; }
+      navbar.classList.toggle('scrolled', window.scrollY>10);
+      updateNavbarOverHero();
+    }
     window.addEventListener('scroll', onScroll, {passive:true});
-    window.addEventListener('touchmove', onScroll, {passive:true});
     updateParallax();
 
-    function openMenu(){ sideMenu.classList.add('open'); overlay.classList.add('open'); hamburger.classList.add('open'); hamburger.setAttribute('aria-expanded','true'); document.body.classList.add('menu-open'); }
-    function closeMenu(){ sideMenu.classList.remove('open'); overlay.classList.remove('open'); hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded','false'); document.body.classList.remove('menu-open'); }
+    // Menu open/close with active-link scroll into view
+    function openMenu(){
+      sideMenu.classList.add('open');
+      overlay.classList.add('open');
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded','true');
+      document.body.classList.add('menu-open');
+      // Scroll active link into view
+      const activeLink = sideMenu.querySelector('a.active');
+      if(activeLink){ setTimeout(()=>{ activeLink.scrollIntoView({block:'nearest',behavior:'smooth'}); },350); }
+    }
+    function closeMenu(){
+      sideMenu.classList.remove('open');
+      overlay.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded','false');
+      document.body.classList.remove('menu-open');
+    }
     hamburger && hamburger.addEventListener('click', ()=> sideMenu.classList.contains('open') ? closeMenu() : openMenu());
     overlay && overlay.addEventListener('click', closeMenu);
-    window.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeMenu(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
 
     function updateNavbarOverHero(){
       if(!navbar||!hero) return;
@@ -152,4 +171,3 @@
   </script>
 </body>
 </html>
-
