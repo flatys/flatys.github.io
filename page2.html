@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="utf-8">
-  <title>Page 3</title>
+  <title>Page 2</title>
   <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
@@ -96,7 +96,7 @@
 
   <div class="hero" id="hero">
     <img src="panorama.jpg" id="heroImg" alt="Panorama">
-    <div class="overlay"><h1>Page 3</h1></div>
+    <div class="overlay"><h1>Page 2</h1></div>
   </div>
 
   <main class="content">
@@ -116,7 +116,7 @@
     let ticking=false;
     function updateParallax(){
       if(!hero||!heroImg) return;
-      if(isTouch){ heroImg.style.transform='translate3d(-50%,0,0)'; ticking=false; return; }
+      if(isTouch){ heroImg.style.transform='translate3d(-50%,0,0) translateZ(0)'; ticking=false; return; }
       const rect=hero.getBoundingClientRect();
       const translateY=Math.round(rect.top * -0.5);
       heroImg.style.transform=`translate3d(-50%, ${translateY}px, 0)`;
