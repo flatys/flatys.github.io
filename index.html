@@ -117,7 +117,7 @@
     let ticking=false;
     function updateParallax(){
       if(!hero||!heroImg) return;
-      if(isTouch){ heroImg.style.transform='translate3d(-50%,0,0)'; ticking=false; return; }
+      if(isTouch){ heroImg.style.transform='translate3d(-50%,0,0) translateZ(0)'; ticking=false; return; }
       const rect=hero.getBoundingClientRect();
       const translateY=Math.round(rect.top * -0.5);
       heroImg.style.transform=`translate3d(-50%, ${translateY}px, 0)`;
@@ -152,3 +152,4 @@
   </script>
 </body>
 </html>
+
