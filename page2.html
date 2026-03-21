@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flatys — Page 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --accent:      #b85c1a;
+      --accent-mid:  #d4763a;
+      --accent-warm: #e8a96a;
+      --bg:          #fdf6ee;
+      --text:        #2e1a0e;
+      --text-mid:    #6b3e26;
+      --text-light:  #9c6644;
+      --border:      rgba(184,92,26,0.18);
+      --nav-h:       64px;
+      --hero-h:      65vh;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* ══ NAV ══════════════════════════════════════════ */
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s; }
+    nav.scrolled { background: rgba(253,246,238,0.94); backdrop-filter: blur(18px); box-shadow: 0 1px 0 var(--border); }
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+    .burger { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; flex-shrink: 0; }
+    .burger span { display: block; width: 20px; height: 1.5px; background: rgba(255,255,255,0.9); border-radius: 2px; transition: transform 0.3s, opacity 0.3s, background 0.4s; }
+    nav.scrolled .burger span { background: var(--text-mid); }
+    .burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-icon { height: 1.75rem; width: 1.75rem; object-fit: contain; display: block; flex-shrink: 0; filter: brightness(0) invert(1); transition: filter 0.4s; }
+    nav.scrolled .nav-icon { filter: brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(600%) hue-rotate(345deg) brightness(0.85); }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: #fff; transition: color 0.4s; white-space: nowrap; }
+    nav.scrolled .nav-logo { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.9); position: relative; padding-bottom: 4px; transition: color 0.3s; }
+    nav.scrolled .nav-links a { color: var(--text-mid); }
+    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent-warm); }
+    nav.scrolled .nav-links a:hover, nav.scrolled .nav-links a.active { color: var(--accent); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links.hidden { display: none !important; }
+    @media (max-width: 600px) { nav { padding: 0 20px; } .nav-links { display: none !important; } }
+
+    /* ══ SIDE PANEL ═══════════════════════════════════ */
+    .side-overlay { position: fixed; inset: 0; z-index: 298; background: rgba(20,8,0,0.45); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .side-overlay.open { opacity: 1; pointer-events: all; }
+    .side-panel { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--bg); z-index: 299; box-shadow: 4px 0 24px rgba(46,26,14,0.12); transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .side-panel.open { transform: translateX(0); }
+    .side-panel-close { position: absolute; top: 18px; right: 18px; width: 28px; height: 28px; background: none; border: none; cursor: pointer; }
+    .side-panel-close::before, .side-panel-close::after { content: ''; position: absolute; top: 50%; left: 50%; width: 16px; height: 1.5px; background: var(--text-mid); border-radius: 2px; }
+    .side-panel-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+    .side-panel-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+    .side-panel-close:hover::before, .side-panel-close:hover::after { background: var(--accent); }
+    .side-panel-title { display: block; padding: 72px 0 14px 28px; font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--text-light); border-bottom: 1px solid var(--border); }
+    .side-panel-links { display: flex; flex-direction: column; }
+    .side-panel-links a { display: block; padding: 15px 28px; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; color: var(--text-mid); border-bottom: 1px solid var(--border); position: relative; transition: color 0.2s, padding-left 0.2s; opacity: 0; transform: translateX(-12px); }
+    .side-panel-links a:hover { color: var(--accent); padding-left: 36px; }
+    .side-panel-links a.active { color: var(--accent); }
+    .side-panel-links a.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 14px; background: var(--accent); border-radius: 0 2px 2px 0; }
+    .side-panel.open .side-panel-links a { animation: linkIn 0.25s forwards; }
+    .side-panel.open .side-panel-links a:nth-child(1) { animation-delay: 0.08s; }
+    .side-panel.open .side-panel-links a:nth-child(2) { animation-delay: 0.14s; }
+    .side-panel.open .side-panel-links a:nth-child(3) { animation-delay: 0.20s; }
+    .side-panel.open .side-panel-links a:nth-child(4) { animation-delay: 0.26s; }
+    @keyframes linkIn { to { opacity: 1; transform: translateX(0); } }
+
+    /* ══ HERO ════════════════════════════════════════ */
+    .hero { position: relative; height: var(--hero-h); overflow: hidden; }
+    .hero-bg { position: absolute; inset: -20%; background-image: url('panorama.jpg'); background-size: cover; background-position: center; will-change: transform; }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(30,10,0,0.22); z-index: 1; }
+    .hero-title { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 3; padding: 0 24px; }
+    .hero-title h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 7vw, 6rem); font-weight: 300; letter-spacing: 0.08em; color: #fff; text-shadow: 0 4px 40px rgba(0,0,0,0.45); opacity: 0; transform: translateY(16px); animation: fadeUp 0.9s 0.4s forwards; }
+    .scroll-hint { position: absolute; bottom: 28px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 3; opacity: 0; animation: fadeUp 0.8s 0.9s forwards; }
+    .scroll-hint span { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: #fff; }
+    .scroll-arrow { width: 18px; height: 18px; border-right: 1px solid #fff; border-bottom: 1px solid #fff; transform: rotate(45deg); animation: bounce 1.6s infinite; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%,100%{ transform: rotate(45deg) translateY(0); } 50%{ transform: rotate(45deg) translateY(5px); } }
+
+    /* ══ CONTENT SECTION ═════════════════════════════ */
+    .content-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 80px 24px 100px;
+      gap: 72px;
+    }
+
+    /* Each block starts invisible — JS adds .visible when in view */
+    .content-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: 680px;
+      gap: 0;
+
+      /* initial hidden state */
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .content-block.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Individual children stagger in once block is visible */
+    .content-block.visible .block-img        { transition-delay: 0.00s; }
+    .content-block.visible .block-title      { transition-delay: 0.10s; }
+    .content-block.visible .block-line       { transition-delay: 0.18s; }
+    .content-block.visible .block-desc       { transition-delay: 0.26s; }
+    .content-block.visible .block-btn        { transition-delay: 0.34s; }
+
+    /* Children also fade up individually */
+    .content-block .block-img,
+    .content-block .block-title,
+    .content-block .block-line,
+    .content-block .block-desc,
+    .content-block .block-btn {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .content-block.visible .block-img,
+    .content-block.visible .block-title,
+    .content-block.visible .block-line,
+    .content-block.visible .block-desc,
+    .content-block.visible .block-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Image box */
+    .block-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .block-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .block-img .placeholder-label {
+      font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--text-light); opacity: 0.45;
+    }
+
+    /* Title */
+    .block-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    /* Accent line under title */
+    .block-line {
+      width: 32px; height: 1px;
+      background: var(--accent-mid);
+      margin: 0 auto 18px;
+    }
+
+    /* Description */
+    .block-desc {
+      font-size: 0.85rem;
+      line-height: 1.9;
+      color: var(--text-light);
+      margin-bottom: 28px;
+      max-width: 520px;
+    }
+
+    /* Button */
+    .block-btn {
+      display: inline-block;
+      padding: 11px 32px;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      transition: background 0.25s, color 0.25s;
+    }
+    .block-btn:hover { background: var(--accent); color: #fff; }
+
+    /* Separator between blocks */
+    .content-block + .content-block {
+      padding-top: 72px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ══ FOOTER ══════════════════════════════════════ */
+    footer { border-top: 1px solid var(--border); padding: 32px 48px; display: flex; justify-content: center; }
+    footer .brand { font-family: 'Cormorant Garamond', serif; color: var(--accent); font-size: 1rem; letter-spacing: 0.15em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-left">
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <img class="nav-icon" src="icon.png" alt="" aria-hidden="true" />
+      <a class="nav-logo" href="index.html">Flatys</a>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="page1.html">Page 1</a></li>
+      <li><a href="page2.html" class="active">Page 2</a></li>
+      <li><a href="page3.html">Page 3</a></li>
+    </ul>
+  </nav>
+
+  <div class="side-overlay" id="sideOverlay"></div>
+  <div class="side-panel" id="sidePanel">
+    <button class="side-panel-close" id="sideClose" aria-label="Close"></button>
+    <span class="side-panel-title">Menu</span>
+    <div class="side-panel-links">
+      <a href="index.html">Home</a>
+      <a href="page1.html">Page 1</a>
+      <a href="page2.html" class="active">Page 2</a>
+      <a href="page3.html">Page 3</a>
+    </div>
+  </div>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-title"><h1>Page 2</h1></div>
+    <div class="scroll-hint"><span>Scroll</span><div class="scroll-arrow"></div></div>
+  </section>
+
+  <!-- Content blocks — centred, stacked vertically -->
+  <div class="content-section">
+
+    <div class="content-block">
+      <div class="block-img">
+        <span class="placeholder-label">Image</span>
+      </div>
+      <h2 class="block-title"></h2>
+      <div class="block-line"></div>
+      <p class="block-desc"></p>
+      <a class="block-btn" href="#">Learn more</a>
+    </div>
+
+    <div class="content-block">
+      <div class="block-img">
+        <span class="placeholder-label">Image</span>
+      </div>
+      <h2 class="block-title"></h2>
+      <div class="block-line"></div>
+      <p class="block-desc"></p>
+      <a class="block-btn" href="#">Learn more</a>
+    </div>
+
+    <div class="content-block">
+      <div class="block-img">
+        <span class="placeholder-label">Image</span>
+      </div>
+      <h2 class="block-title"></h2>
+      <div class="block-line"></div>
+      <p class="block-desc"></p>
+      <a class="block-btn" href="#">Learn more</a>
+    </div>
+
+  </div>
+
+  <footer><span class="brand">Flatys</span></footer>
+
+  <script>
+    const navbar      = document.getElementById('navbar');
+    const heroBg      = document.getElementById('heroBg');
+    const burger      = document.getElementById('burger');
+    const navLinks    = document.getElementById('navLinks');
+    const sidePanel   = document.getElementById('sidePanel');
+    const sideOverlay = document.getElementById('sideOverlay');
+    const sideClose   = document.getElementById('sideClose');
+
+    function checkWidth() {
+      navLinks.style.visibility = 'hidden';
+      navLinks.style.display    = 'flex';
+      const fits = document.querySelector('.nav-left').offsetWidth + navLinks.offsetWidth + 80 <= navbar.offsetWidth;
+      navLinks.style.visibility = '';
+      navLinks.style.display    = '';
+      navLinks.classList.toggle('hidden', !fits);
+    }
+    window.addEventListener('resize', checkWidth);
+    checkWidth();
+
+    function openMenu()  { sidePanel.classList.add('open'); sideOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; burger.classList.add('open'); }
+    function closeMenu() { sidePanel.classList.remove('open'); sideOverlay.classList.remove('open'); document.body.style.overflow = ''; burger.classList.remove('open'); }
+
+    burger.addEventListener('click', () => sidePanel.classList.contains('open') ? closeMenu() : openMenu());
+    sideClose.addEventListener('click', closeMenu);
+    sideOverlay.addEventListener('click', closeMenu);
+    document.querySelectorAll('.side-panel-links a').forEach(a => a.addEventListener('click', closeMenu));
+
+    function onScroll() {
+      const s = window.scrollY;
+      heroBg.style.transform = `translateY(${s * 0.4}px)`;
+      navbar.classList.toggle('scrolled', s > 40);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Scroll-reveal for content blocks ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // animate once
+        }
+      });
+    }, {
+      threshold: 0.15   // trigger when 15% of block is in view
+    });
+
+    document.querySelectorAll('.content-block').forEach(block => {
+      observer.observe(block);
+    });
+  </script>
+</body>
+</html>
