@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Flatys — Home</title>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Fonts (Origineel hersteld) ────────────────────────────── */
+    @font-face {
+      font-family: 'CormorantGaramond';
+      src: url('CormorantGaramond.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('Montserrat-VariableFont_wght.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    /* ── Variables ──────────────────────────────────────────────── */
+    :root {
+      --accent:      #b85c1a;
+      --accent-mid:  #d4763a;
+      --accent-warm: #e8a96a;
+      --bg:          #fdf6ee;
+      --text:        #2e1a0e;
+      --text-mid:    #6b3e26;
+      --text-light:  #9c6644;
+      --border:      rgba(184,92,26,0.18);
+      --panel-w:     260px;
+      --hero-h:      60vh;
+      --serif:       'CormorantGaramond', Georgia, 'Times New Roman', serif;
+      --sans:        'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Hamburger ──────────────────────────────────────────────── */
+    #hamburger {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 400; /* Lager dan side-panel */
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+              appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      gap: 5px;
+    }
+
+    #hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      border-radius: 2px;
+      -webkit-transition: background 0.25s;
+              transition: background 0.25s;
+    }
+
+    #hamburger.ham-light span { background: rgba(255,255,255,0.9); }
+    #hamburger.ham-dark span  { background: var(--text-mid); }
+
+    /* ── Side Panel ─────────────────────────────────────────────── */
+    #side-panel {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--panel-w);
+      background: var(--bg);
+      z-index: 500; /* Fix: Hoger dan hamburger zodat icoon bedekt wordt */
+      -webkit-box-shadow: 4px 0 24px rgba(46,26,14,0.12);
+              box-shadow: 4px 0 24px rgba(46,26,14,0.12);
+      -webkit-transform: translateX(-100%);
+          -ms-transform: translateX(-100%);
+              transform: translateX(-100%);
+      -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.4,0,0.2,1);
+              transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    #side-panel.open {
+      -webkit-transform: translateX(0);
+          -ms-transform: translateX(0);
+              transform: translateX(0);
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 450;
+      background: rgba(20,8,0,0.45);
+      opacity: 0;
+      pointer-events: none;
+      -webkit-transition: opacity 0.3s;
+              transition: opacity 0.3s;
+    }
+    #overlay.open { opacity: 1; pointer-events: all; }
+
+    #panel-close {
+      position: absolute;
+      top: 18px; right: 18px;
+      width: 28px; height: 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    #panel-close:before, #panel-close:after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 16px; height: 1.5px;
+      background: var(--text-mid);
+    }
+    #panel-close:before { -webkit-transform: translate(-50%,-50%) rotate(45deg); transform: translate(-50%,-50%) rotate(45deg); }
+    #panel-close:after { -webkit-transform: translate(-50%,-50%) rotate(-45deg); transform: translate(-50%,-50%) rotate(-45deg); }
+
+    .panel-brand {
+      display: block;
+      padding: 28px 28px 0;
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--text);
+    }
+
+    .panel-label {
+      display: block;
+      margin-top: 48px;
+      padding: 0 0 14px 28px;
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-links a {
+      display: block;
+      padding: 15px 28px;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-links a.active { color: var(--accent); }
+
+    /* ── Panorama ──────────────────────────────────────────────── */
+    #panorama {
+      position: relative;
+      width: 100%;
+      height: var(--hero-h);
+      background: var(--text);
+      overflow: hidden;
+    }
+    #panorama img { width: 100%; height: 100%; object-fit: cover; }
+    #panorama-text {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    #panorama-text h1 {
+      font-family: var(--serif);
+      font-size: clamp(40px, 7vw, 88px);
+      color: #fff;
+    }
+
+    /* ── Content Sectie (Fix: Alles onder elkaar voor iOS 7) ────── */
+    .content-section {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+    }
+
+    .content-block {
+      margin-bottom: 48px;
+      text-align: center; /* Zorgt dat alles centraal onder elkaar staat */
+    }
+
+    .content-block + .content-block {
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+
+    /* Onafhankelijke styling per vak element */
+    .block-image {
+      display: block;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 20px auto;
+      object-fit: contain;
+    }
+
+    .block-title {
+      display: block;
+      font-family: var(--serif);
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .block-desc {
+      display: block;
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+    }
+
+    .block-btn {
+      display: inline-block;
+      padding: 9px 28px;
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="overlay"></div>
+
+  <aside id="side-panel">
+    <button id="panel-close"></button>
+    <a href="index.html" class="panel-brand">Flatys</a>
+    <span class="panel-label">Menu</span>
+    <nav class="panel-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="page1.html">Pagina 1</a>
+      <a href="page2.html">Pagina 2</a>
+      <a href="page3.html">Pagina 3</a>
+    </nav>
+  </aside>
+
+  <button id="hamburger" class="ham-light">
+    <span></span><span></span><span></span>
+  </button>
+
+  <header id="panorama">
+    <img src="panorama.jpg" alt="">
+    <div id="panorama-text">
+      <h1>Flatys</h1>
+      <p>Home</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="content-section">
+      <div class="content-block">
+          <img src="ipa.png" class="block-image">
+          <h2 class="block-title">IPA Library</h2>
+          <p class="block-desc">decrypted ipa files &amp; externalVersionIDs</p>
+          <a class="block-btn" href="page1.html">Open</a>
+      </div>
+
+      <div class="content-block">
+          <img src="image2.png" class="block-image">
+          <h2 class="block-title">Titel</h2>
+          <p class="block-desc">Beschrijving van dit onderdeel.</p>
+          <a class="block-btn" href="page2.html">Open</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var panel     = document.getElementById('side-panel');
+      var overlay   = document.getElementById('overlay');
+      var hamburger = document.getElementById('hamburger');
+      var closeBtn  = document.getElementById('panel-close');
+      var panorama  = document.getElementById('panorama');
+
+      function updateHamColor() {
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        var panHeight = panorama ? panorama.offsetHeight : 0;
+        if (scrollY + 52 < panHeight) {
+          hamburger.className = 'ham-light';
+        } else {
+          hamburger.className = 'ham-dark';
+        }
+      }
+
+      window.addEventListener('scroll', updateHamColor);
+      updateHamColor();
+
+      hamburger.onclick = function() {
+        panel.className = 'open';
+        overlay.className = 'open';
+      };
+
+      function closePanel() {
+        panel.className = '';
+        overlay.className = '';
+      }
+
+      closeBtn.onclick = closePanel;
+      overlay.onclick = closePanel;
+    }());
+  </script>
+</body>
+</html>
