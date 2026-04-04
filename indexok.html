@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Flatys</title>
+<style>
+/* --- ENKEL DEZE BESTANDEN UIT JOUW MAP --- */
+@font-face {
+  font-family: 'CormorantGaramondLocal';
+  src: url('CormorantGaramond.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MontserratLocal';
+  src: url('Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MontserratLocal';
+  src: url('Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+/* --- Basis (exacte kleuren en typografie) --- */
+html,body { height:100%; margin:0; padding:0; background:#fdf6ee; color:#2e1a0e; font-family:'MontserratLocal', sans-serif; -webkit-text-size-adjust:100%; }
+
+/* --- PANORAMA als achtergrond (cover) --- */
+.header {
+  position:relative;
+  width:100%;
+  height:50vh;
+  min-height:260px;
+  background-image: url('panorama.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow:hidden;
+}
+
+/* iOS8-safe centrering zonder transform */
+.header-title {
+  position:absolute;
+  top:50%;
+  left:0;
+  width:100%;
+  text-align:center;
+  margin-top:-36px;
+  font-family:'CormorantGaramondLocal', serif;
+  font-size:56px;
+  line-height:1;
+  color:#ffffff;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* --- Container en secties --- */
+.container { width:90%; max-width:900px; margin:28px auto; }
+
+/* Section: geen wit vlak, alles gecentreerd */
+.section {
+  text-align:center;
+  background:transparent;
+  border:none;
+  padding:22px 0;
+  position:relative;
+}
+
+/* Visuele scheiding tussen secties (kleur uit jouw palet) */
+.section + .section {
+  border-top: 1px solid #cfa27a;
+  margin-top: 18px;
+  padding-top: 26px;
+}
+
+/* Afbeeldingsvak per sectie (geen outline) */
+.image-box {
+  width:100%;
+  position:relative;
+  overflow:hidden;
+  background:#f4e7d9;
+  height:0;
+  padding-top:56.25%;
+  margin:0 auto 14px auto;
+  border:none;
+}
+.image-box img {
+  position:absolute;
+  top:0; left:0; width:100%; height:100%;
+  display:block;
+  object-fit:cover;
+  border:none;
+}
+
+/* Titels en beschrijving (exacte kleuren) */
+.section h2 { font-family:'CormorantGaramondLocal', serif; color:#6b3e26; font-size:20px; margin:6px 0; }
+.section p { font-family:'MontserratLocal', sans-serif; color:#6b3e26; font-size:15px; margin:6px 0 12px 0; }
+
+/* Knop: 1px outline, geen fill, gecentreerd (kleur uit palet) */
+.button-outline {
+  display:inline-block;
+  padding:9px 18px;
+  border:1px solid #b85c1a;
+  background:transparent;
+  color:#b85c1a;
+  text-decoration:none;
+  font-family:'MontserratLocal', sans-serif;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+
+/* --- SIDEBAR (iOS8 friendly) --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px; /* hidden by default */
+  width: 260px;
+  height: 100%;
+  background: #ffffff;
+  border-right: 1px solid #cfa27a;
+  z-index: 1200;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transition: left 0.22s ease;
+  box-sizing: border-box;
+  padding: 18px 14px;
+  font-family: 'MontserratLocal', sans-serif;
+}
+
+/* open state */
+.sidebar.open { left: 0; }
+
+/* sidebar header and links use exact color palette */
+.sidebar h3 {
+  margin: 0 0 12px 0;
+  font-family: 'CormorantGaramondLocal', serif;
+  color: #6b3e26;
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+.sidebar a {
+  display:block;
+  color:#2e1a0e;               /* main text color from your palette */
+  text-decoration:none;
+  padding:10px 6px;
+  border-bottom:1px solid #f4e7d9;
+  font-size:0.95rem;
+}
+.sidebar a:hover,
+.sidebar a:active {
+  color:#b85c1a;               /* accent on hover */
+}
+
+/* overlay to dim content when sidebar open */
+.overlay {
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1100;
+  display: none;
+}
+.overlay.show { display:block; }
+
+/* NAV TOGGLE (no outline, adapts when sidebar open) */
+/* default: fixed near top-left but above content; no border/outline */
+.nav-toggle {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1300;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;               /* outline removed as requested */
+  color: #b85c1a;
+  font-family: 'MontserratLocal', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  -webkit-appearance:none;
+  appearance:none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/* When sidebar is open, move the nav-toggle to the right of the sidebar so it does not cover it */
+body.sidebar-open .nav-toggle {
+  left: 274px; /* sidebar width (260) + 14px gap */
+}
+
+/* On small screens adjust the offset */
+@media screen and (max-width:480px) {
+  .header { height:46vh; }
+  .header-title { font-size:40px; margin-top:-32px; }
+  .section h2 { font-size:18px; }
+  .section p { font-size:14px; }
+  .sidebar { width:220px; left:-220px; }
+  .sidebar.open { left:0; }
+  body.sidebar-open .nav-toggle { left: 234px; } /* 220 + 14 */
+}
+</style>
+</head>
+<body>
+
+<!-- NAV TOGGLE -->
+<button class="nav-toggle" id="navToggle" aria-controls="siteSidebar" aria-expanded="false">Menu</button>
+
+<!-- SIDEBAR -->
+<nav id="siteSidebar" class="sidebar" role="navigation" aria-label="Hoofd navigatie">
+  <h3>Navigatie</h3>
+  <a href="#sec1">Sectie 1</a>
+  <a href="#sec2">Sectie 2</a>
+  <a href="#sec3">Sectie 3</a>
+  <a href="#over">Over</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- OVERLAY -->
+<div id="pageOverlay" class="overlay" tabindex="-1"></div>
+
+<!-- PANORAMA -->
+<div class="header" role="banner" aria-label="Panorama">
+  <div class="header-title">Flatys</div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+  <div class="section" id="sec1">
+    <div class="image-box" aria-hidden="false">
+      <img src="placeholder1.jpg" alt="" onerror="this.style.display='none'">
+    </div>
+    <h2>Titel 1</h2>
+    <p>Beschrijving van de eerste sectie komt hier.</p>
+    <a class="button-outline" href="#">Lees meer</a>
+  </div>
+
+  <div class="section" id="sec2">
+    <div class="image-box" aria-hidden="false">
+      <img src="placeholder2.jpg" alt="" onerror="this.style.display='none'">
+    </div>
+    <h2>Titel 2</h2>
+    <p>Beschrijving van de tweede sectie komt hier.</p>
+    <a class="button-outline" href="#">Lees meer</a>
+  </div>
+
+  <div class="section" id="sec3">
+    <div class="image-box" aria-hidden="false">
+      <img src="placeholder3.jpg" alt="" onerror="this.style.display='none'">
+    </div>
+    <h2>Titel 3</h2>
+    <p>Beschrijving van de derde sectie komt hier.</p>
+    <a class="button-outline" href="#">Lees meer</a>
+  </div>
+
+</div>
+
+<script>
+/* iOS8-friendly sidebar toggle: updates body class so CSS can reposition the nav button */
+(function () {
+  var navToggle = document.getElementById('navToggle');
+  var sidebar = document.getElementById('siteSidebar');
+  var overlay = document.getElementById('pageOverlay');
+  var body = document.body;
+
+  function openSidebar() {
+    if (sidebar.className.indexOf('open') === -1) sidebar.className += ' open';
+    if (overlay.className.indexOf('show') === -1) overlay.className += ' show';
+    body.className = (body.className + ' sidebar-open').replace(/\s+/g,' ').trim();
+    navToggle.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeSidebar() {
+    sidebar.className = sidebar.className.replace(/\bopen\b/, '').replace(/\s+/g,' ').trim();
+    overlay.className = overlay.className.replace(/\bshow\b/, '').replace(/\s+/g,' ').trim();
+    body.className = body.className.replace(/\bsidebar-open\b/, '').replace(/\s+/g,' ').trim();
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  navToggle.addEventListener('click', function (e) {
+    var isOpen = /open/.test(sidebar.className);
+    if (isOpen) closeSidebar(); else openSidebar();
+    e.preventDefault();
+  }, false);
+
+  overlay.addEventListener('click', function (e) {
+    closeSidebar();
+    e.preventDefault();
+  }, false);
+
+  var links = sidebar.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function () {
+      closeSidebar();
+    }, false);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var key = e.key || e.keyCode;
+    if (key === 'Escape' || key === 'Esc' || key === 27) {
+      closeSidebar();
+    }
+  }, false);
+})();
+</script>
+
+</body>
+</html>
