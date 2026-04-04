@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Flatys</title>
+
+<style>
+/* --- FONTS UIT JOUW DIRECTORY --- */
+@font-face {
+    font-family: 'CormorantGaramond';
+    src: url('CormorantGaramond.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Montserrat';
+    src: url('Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+
+/* --- BASISSTIJL (zoals voorbeeldpagina) --- */
+body {
+    background: #fdf6ee;
+    color: #2e1a0e;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- PANORAMA HEADER --- */
+.header {
+    position: relative;
+    width: 100%;
+    height: 50vh; /* 50% van scherm */
+    overflow: hidden;
+}
+
+.header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Titel op panorama */
+.header-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'CormorantGaramond', serif;
+    font-size: 3rem;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+
+/* --- CONTENT SECTIES --- */
+.section {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    border: 1px solid #cfa27a;
+    padding: 20px;
+}
+
+.section img {
+    width: 100%;
+    border: 1px solid #cfa27a;
+}
+
+.section h2 {
+    font-family: 'CormorantGaramond', serif;
+    color: #6b3e26;
+    font-size: 1.8rem;
+    margin-top: 15px;
+}
+
+.section p {
+    font-size: 1rem;
+    color: #6b3e26;
+}
+
+/* Outline knop */
+.button-outline {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: 2px solid #b85c1a;
+    color: #b85c1a;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANORAMA -->
+<div class="header">
+    <img src="panorama.jpg" alt="Panorama">
+    <div class="header-title">Flatys</div>
+</div>
+
+<!-- SECTIE 1 -->
+<div class="section">
+    <img src="placeholder1.jpg" alt="">
+    <h2>Titel 1</h2>
+    <p>Beschrijving van de eerste sectie komt hier.</p>
+    <a href="#" class="button-outline">Lees meer</a>
+</div>
+
+<!-- SECTIE 2 -->
+<div class="section">
+    <img src="placeholder2.jpg" alt="">
+    <h2>Titel 2</h2>
+    <p>Beschrijving van de tweede sectie komt hier.</p>
+    <a href="#" class="button-outline">Lees meer</a>
+</div>
+
+<!-- SECTIE 3 -->
+<div class="section">
+    <img src="placeholder3.jpg" alt="">
+    <h2>Titel 3</h2>
+    <p>Beschrijving van de derde sectie komt hier.</p>
+    <a href="#" class="button-outline">Lees meer</a>
+</div>
+
+</body>
+</html>
